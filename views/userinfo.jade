@@ -1,0 +1,15 @@
+extends ./view-template
+
+block styles
+
+block content
+  body(ng-app='mainCtr')
+    div(ng-controller='UserInfo')
+      h3 사용자 프로필
+      img.img-circle.center-block(src='{{userinfo[0].userprofileimage}}', width='100', height='100')
+      h4 {{userinfo[0].nickname}}
+      h5 userID : {{userinfo[0].userid}}
+      a#btn_logout.btn.btn-warning(href='/auth/logout', role='button') 로그아웃
+
+block scripts
+  script(src='/public/controllers/mainCtr-controller.js')

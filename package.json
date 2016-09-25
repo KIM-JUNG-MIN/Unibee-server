@@ -1,0 +1,37 @@
+{
+  "name": "fg-unibee-server",
+  "version": "1.0.0",
+  "description": "Duksung Digital Media Graduation Team. FG 2016",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fg-unibee/Unibee_nodejs_server.git"
+  },
+  "author": "KIM JUNG MIN",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fg-unibee/Unibee_nodejs_server/issues"
+  },
+  "homepage": "https://github.com/fg-unibee/Unibee_nodejs_server#readme",
+  "dependencies": {
+    "async": "^2.0.1",
+    "aws-sdk": "^2.5.6",
+    "body-parser": "^1.15.2",
+    "canvas": "^1.4.0",
+    "express": "^4.14.0",
+    "express-mysql-session": "^1.1.1",
+    "express-session": "^1.14.0",
+    "formidable": "^1.0.17",
+    "jade": "^1.11.0",
+    "mysql": "^2.11.1",
+    "paper": "^0.10.2",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pbkdf2-password": "^1.1.0",
+    "shortid": "^2.2.6",
+    "socket.io": "^1.4.8"
+  }
+}

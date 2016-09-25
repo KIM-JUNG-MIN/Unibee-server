@@ -1,0 +1,49 @@
+body {
+  background: #EAE8E8 !important;
+}
+
+.navbar-fixed-top {
+    background: #FEE305;
+    min-height: 5px;
+}
+
+.login-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+#content{
+  margin-top: 100px;
+}
+
+#icon{
+  	font-size:80pt;
+}
+
+#center{
+  	text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-register-form-section .btn-custom {
+    width: 150px;
+    background-color: #FEE305;
+    border-color: #FEE305;
+    margin-top: 10px;
+    border-radius: 5;
+    color: #605F5F;
+
+}
+
+.login-register-form-section .btn-custom:hover {
+    -webkit-box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow:    0px 3px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:         0px 3px 0px rgba(0, 0, 0, 0.3);
+    background-color: #727272;
+    border-color: #727272;
+    color: #fff;
+}
+
+#bee_submit{
+  margin-right: 20px;
+}

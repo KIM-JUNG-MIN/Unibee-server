@@ -1,0 +1,28 @@
+extends ./view-template
+
+block styles
+
+block content
+  body(ng-app='mainCtr')
+    section.jumbotron.text-xs-center
+      .container
+        h1 Bee!
+        p.lead.text-muted
+          |Bee is a group for sharing your work and fun with friends.
+        p
+        .bd-example
+          a.btn.btn-warning(href='/bee/new', role='button') New Bee
+
+    .row(ng-controller='BeeList')
+        .col-md-4.portfolio-item(ng-repeat='bee in beelist')
+          .panel.panel-default.fadeInDown
+            .panel-body
+                img#bee_thumbnail.img-responsive(src='{{bee.bee_thumbnail}}')
+                h3
+                  {{bee.bee_title}}
+                p
+                  {{bee.bee_description}}
+                a.btn.btn-warning(href='/bee/{{bee.bee_id}}', role='button') Enter
+
+block scripts
+  script(src='/public/controllers/mainCtr-controller.js')

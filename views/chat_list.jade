@@ -1,0 +1,62 @@
+extends ./view-template
+
+block styles
+    link(href='/public/css/chat-chatting-style.css', rel='stylesheet', type='text/css')
+
+block content
+  body(ng-app='mainCtr')
+    .panel.panel-primary(ng-controller='FriendList')
+        .panel-heading.center
+            .panel-title.pull-center
+              h2 GroupChatting
+            .clearfix
+
+
+        #friendlist.panel-body
+            ul.chat
+
+              li.dropdown
+                a.dropdown-toggle(href='http://www.jquery2dotnet.com', data-toggle='dropdown', title='dropdown')
+                  span.glyphicon.glyphicon-heart
+                  | bee project talk
+                  b.caret
+                ul.dropdown-menu(style='padding: 15px;min-width: 250px;')
+                  li
+                    .row
+                      .col-md-12
+                        #content
+                        #center
+                          .chat-form
+                            .chatContainer
+                              .chatHeader
+                                  #center
+                                    h3 Bee Project Name
+                              .chatMessages
+                                  #chat.chat_box_wrapper.chat_box_small.chat_box_active(style='opacity: 1; display: block; transform: translateX(0px);')
+                                    .chat_box.touchscroll.chat_box_colors_a
+                                      .chat_message_wrapper
+                                        .chat_user_avatar
+                                          img.md-user-image(alt='Gurdeep Osahan (Web Designer)', title='Gurdeep Osahan (Web Designer)', src='https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/bee_default2.png')
+                                        ul.chat_message
+                                          li
+                                            p  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, eum?
+                                          li
+                                            p
+                                              | Lorem ipsum dolor sit amet.
+                                              span.chat_message_time 13:38
+                                      .chat_message_wrapper.chat_message_right
+                                        .chat_user_avatar
+                                          img.md-user-image(alt='Gurdeep Osahan (Web Designer)', title='Gurdeep Osahan (Web Designer)', src='https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/bee_default2.png')
+                                        ul.chat_message
+                                          li
+                                            p
+                                              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem delectus distinctio dolor earum est hic id impedit ipsum minima mollitia natus nulla perspiciatis quae quasi, quis recusandae, saepe, sunt totam.
+                                              span.chat_message_time 13:34
+                                .chatBottom
+                                  form#chatForm(action='#', onsubmit='return false;')
+                                      input#name(type='hidden', value='')
+                                      input#text(type='text', name='text', value='', placeholder='type your chat message')
+                                      input(type='submit', name='submit', value='Post')
+
+block scripts
+  script(src='/public/controllers/mainCtr-controller.js')

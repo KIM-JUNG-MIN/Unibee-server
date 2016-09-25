@@ -1,0 +1,27 @@
+extends ./view-template
+
+block styles
+  link(href='/public/css/login-register-style.css', rel='stylesheet', type='text/css')
+
+block content
+  nav.navbar.navbar-fixed-top
+    .container
+      .navbar-header
+  .container
+    .login-form
+      img.img-responsive.center-block(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon.png')
+      h1 로그인
+      div(role='main_page')
+        .login-register-form-section
+           form(method='post', action='/auth/login')
+              .input-group
+                .input-group-addon
+                  i.fa.fa-user
+                input.form-control.input-lg(type='text', name='username', placeholder='Username')
+
+              .input-group
+                .input-group-addon
+                  i.fa.fa-key
+                input.form-control.input-lg(type='password', name='password', placeholder='Password')
+
+              input.btn.btn-custom(type='submit', value='Login')

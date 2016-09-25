@@ -1,0 +1,25 @@
+extends ./view-template
+
+block styles
+
+block content
+  body(ng-app='mainCtr')
+    .panel.panel-primary(ng-controller='FriendList')
+        .panel-heading
+            .panel-title.pull-left
+              h4 친구 목록
+            #friendadd.btn.btn-default.pull-right(onclick="location.href='/friend/add'",role='button')
+              span.fa.fa-plus
+            .clearfix
+
+        #friendlist.panel-body
+            ul.chat(ng-repeat='friend in friendlist')
+              li.left.clearfix
+                span.chat-img.pull-left
+                  img.img-circle(src='{{friend.userprofileimage}}')
+                  {{friend.nickname}}
+                .text-right
+                  | hell
+
+block scripts
+  script(src='/public/controllers/mainCtr-controller.js')

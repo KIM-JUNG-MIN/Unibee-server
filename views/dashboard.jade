@@ -1,0 +1,43 @@
+extends ./view-template
+
+block styles
+  link(href="/public/css/sidebar-style.css", rel="stylesheet")
+  link(href="/public/css/friend-style.css", rel="stylesheet")
+
+block content
+    .navbar.navbar-inverse.navbar-twitch(role='navigation')
+      .container
+        .navbar-header
+          .navbar-brand(href='#')
+            img(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon_shadow.png')
+
+      ul.nav.navbar-nav
+          li#nav-user
+            a.text-center(href='#')
+              span.fa.fa-user
+              p User
+
+              #userSidenav.sidenav
+                include userinfo
+
+          li#nav-friend
+            a.text-center(href='#')
+              span.fa.fa-users
+              p Friend
+
+              #friendSidenav.sidenav
+                include friend_list
+
+          li#nav-chat
+            a.text-center(href='#')
+              span.fa.fa-comments-o
+              p Chat
+
+    //sidebar
+    .page-content
+        include bee
+
+
+block scripts
+  script(src="/socket.io/socket.io.js")
+  script(src="/public/js/sidebar.js")

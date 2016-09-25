@@ -1,0 +1,30 @@
+extends ./view-template
+
+block styles
+  link(href='/public/css/bee-new-style.css', rel='stylesheet', type='text/css')
+
+block content
+  nav.navbar.navbar-fixed-top
+    .container
+      .navbar-header
+
+  #content
+    .login-form
+      #center
+        span#icon.fa.fa-cubes
+        h1 Bee 만들기
+      div
+        .login-register-form-section
+          form(method='post', action='/bee/new', enctype='multipart/form-data')
+            .form-group
+              label.control-label ProfileImage:
+              input.file-loading(name='beethumbnail', type='file')
+            .form-group
+              label.control-label Title:
+              input.form-control(type='text', name='bee_title', placeholder='Bee의 제목을 입력해주세요.')
+            .form-group
+              label.control-label Description:
+              textarea.form-control(type='text', name='bee_description', placeholder='Bee의 설명을 입력해주세요.')
+            #center
+              button#bee_submit.btn.btn-custom(type='submit') OK
+              button.btn.btn-custom(type='button', onclick='history.back(-1)') Cancel
