@@ -9,37 +9,39 @@ block styles
 
 
 block content
-  h1= hello
+  body(ng-app='drawApp', ng-controller='drawCtrl')
+    input.form-control(type='text', ng-model='hello', placeholder='Input Text')
+    button.btn.btn-custom(type='button', ng-click='submit()') OK
+    h1= hello
 
-  .btn-group(role='group')
-    button#btn_color.btn.btn-default(type='button') colorpicker
-    button#btn_png.btn.btn-default(type='button') exportPNG
+    .btn-group(role='group')
+      button#btn_color.btn.btn-default(type='button') colorpicker
+      button#btn_png.btn.btn-default(type='button') exportPNG
 
-  br
-  br
-  input#ex8(
-    data-slider-id='ex1Slider',
-    type='text',
-    data-slider-min='1',
-    data-slider-max='20',
-    data-slider-step='1',
-    data-slider-value='5')
+    br
+    br
+    input#ex8(
+      data-slider-id='ex1Slider',
+      type='text',
+      data-slider-min='1',
+      data-slider-max='20',
+      data-slider-step='1',
+      data-slider-value='5')
 
-  label.checkbox-inline
-    input#toggle-erase(data-toggle='toggle', type='checkbox')
-    |  Erase
+    label.checkbox-inline
+      input#toggle-erase(data-toggle='toggle', type='checkbox')
+      |  Erase
 
-  h1 Uniee whieboard
-  h3 Image File Reader
-  div
-    input#fileInput(type='file')
+    h1 Uniee whieboard
+    h3 Image File Reader
+    div
+      input#fileInput(type='file')
 
-  button#btn_img_up.btn.btn-default(type='button') +
-  button#btn_img_down.btn.btn-default(type='button') -
-  button#btn_img_delete.btn.btn-default(type='button') x
+    button#btn_img_up.btn.btn-default(type='button') +
+    button#btn_img_down.btn.btn-default(type='button') -
+    button#btn_img_delete.btn.btn-default(type='button') x
 
-
-  canvas#myCanvas(resize='true')
+    canvas#myCanvas(drawing-board)
 
 
 block scripts
@@ -50,4 +52,5 @@ block scripts
 
   //paper.js
   script(type='text/javascript', src='/node_modules/paper/dist/paper-full.js')
-  script(type='text/paperscript', src='/public/js/draw.js', canvas='myCanvas')
+  script(type='text/javascript', src='/public/controllers/draw-app.js')
+  script(type='text/javascript', src='/public/controllers/drawCtr-controller.js')
