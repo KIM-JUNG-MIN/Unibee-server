@@ -129,3 +129,14 @@ body {
 .portfolio-item{
   width: 240px;
 }
+
+/*friendlist*/
+.online{
+ margin-right: 10px;
+ float: right;
+ margin-top: 1%;
+ height: 15px;
+ width: 15px;
+ background-color: #0EE700;
+ border-radius: 500px;
+}

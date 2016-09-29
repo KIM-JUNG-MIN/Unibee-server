@@ -4,7 +4,7 @@ var router = express.Router();
 
 router.get('/list', function(req, res){
 
-  var queryData = 'SELECT user.userid, user.nickname, user.userprofileimage ';
+  var queryData = 'SELECT user.userid, user.nickname, user.userprofileimage, user.online ';
   queryData += 'FROM user ';
   queryData += 'WHERE userid IN ';
   queryData += '(SELECT friend_id FROM friend WHERE me_id = ?)';
