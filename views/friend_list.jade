@@ -1,9 +1,6 @@
 extends ./view-template
 
-block styles
-
 block content
-  body(ng-app='mainCtr')
     .panel.panel-primary(ng-controller='FriendList')
         .panel-heading
             .panel-title.pull-left
@@ -20,7 +17,3 @@ block content
                   {{friend.nickname}}
                 .text-right
                   span.online(ng-style="{'background-color': friend.online=='Y' ? '#0EE700' :'red'}")  
-
-
-block scripts
-  script(src='/public/controllers/mainCtr-controller.js')

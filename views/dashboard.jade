@@ -5,6 +5,7 @@ block styles
   link(href="/public/css/friend-style.css", rel="stylesheet")
 
 block content
+  body(ng-app='mainCtr')
     .navbar.navbar-inverse.navbar-twitch(role='navigation')
       .container
         .navbar-header
@@ -40,4 +41,5 @@ block content
 
 block scripts
   script(src="/socket.io/socket.io.js")
+  script(src='/public/controllers/mainCtr-controller.js')
   script(src="/public/js/sidebar.js")

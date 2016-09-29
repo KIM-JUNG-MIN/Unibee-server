@@ -179,11 +179,11 @@ module.exports = function(app) {
   });
   //등록된 session 호출
 
-  router.get('/logout', function(req, res) {
+  router.post('/logout', function(req, res) {
     req.logout();
 
     req.session.save(function(){
-      res.redirect('/main');
+      res.json('success');
     });
   });
   //로그아웃

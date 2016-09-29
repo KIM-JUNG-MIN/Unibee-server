@@ -3,11 +3,15 @@ var app = express();
 var http = require('http').Server(app);
 var path = require('path');
 var bodyParser = require('body-parser');
+
 var auth = require('./routes/auth');
 var bee = require('./routes/bee');
 var userinfo = require('./routes/userinfo');
 var friend = require('./routes/friend');
+
+
 var projects = require('./util/projects.js');
+var db = require('./util/db.js');
 var ueberDB = require('./util/ueberDB.js');
 var paper = require('paper');
 var draw = require('./routes/draw.js');
@@ -42,6 +46,28 @@ app.get('/main', function(req, res){
 
 
 io.sockets.on('connection', function(socket){
+
+  socket.on('update_friendlist',function(data){
+    //data.purpose;
+    if((String(data.purpose.trim()))=='login'){
+      var query="update user set online = ? where userid = ?";
+      db.query(String(query),['Y',data.userid],function(err,rows){
+
+        console.log(data.userid + '/' + 'login');
+        io.emit('changeOnline');
+
+      });
+    }else{
+
+      var query="update user set online = ? where userid = ?";
+      db.query(String(query),['N',data.userid],function(err,rows){
+        
+        console.log(data.userid + '/' + 'logout');
+        io.emit('changeOnline');
+      });
+    }
+  });
+
   console.log('a user connected');
 
   var sessionId = socket.id;

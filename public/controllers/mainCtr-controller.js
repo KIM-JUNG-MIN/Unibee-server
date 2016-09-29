@@ -1,28 +1,46 @@
-var mainCtr = angular.module('mainCtr', []);
+var socket = io();
+var mainCtr = angular.module('mainCtr', [])
+  .controller('BeeList', ['$scope','$http', function($scope, $http) {
 
-mainCtr.controller('BeeList', ['$scope','$http', function($scope, $http) {
+    $http.get('/bee/list').success(function(response){
+      $scope.beelist = response;
+    });
+}])
+  .controller('UserInfo', ['$scope','$http', '$window', function($scope, $http, $window) {
 
-  $http.get('/bee/list').success(function(response){
-    $scope.beelist = response;
-  });
-}]);
+    var currentUser;
 
-mainCtr.controller('UserInfo', ['$scope','$http', function($scope, $http) {
+    $http.get('/userinfo/me').success(function(response){
+       $scope.userinfo = response;
+       currentUser = response[0].userid;
+       var data_login={purpose:'login', userid:currentUser}
+       socket.emit('update_friendlist', data_login);
 
-  $http.get('/userinfo/show').success(function(response){
-     $scope.userinfo = response;
-  });
-}]);
+    });
 
-mainCtr.controller('FriendList', ['$scope','$http', function($scope, $http) {
+    $scope.logout = function(){
+      $http.post('/auth/logout').success(function(data, status) {
+        var data_logout={purpose:'logout', userid:currentUser}
+        socket.emit('update_friendlist', data_logout);
+        $window.location.href='/main'
+      }).error(function(data, status) {
+          alert("Connection Error");
+      });
+    }
 
-  $http.get('/friend/list').success(function(response){
-     $scope.friendlist = response;
-  });
-}]);
+}])
+  .controller('FriendList', ['$scope','$http', function($scope, $http) {
 
-mainCtr.controller('AllUser', ['$scope','$http', function($scope, $http) {
-  $http.get('/userinfo/all').success(function(response){
-     $scope.alluser = response;
-  });
+    // first friend list
+    $http.get('/friend/list').success(function(response){
+       $scope.friendlist = response;
+    });
+
+    // change friend online status
+    socket.on('changeOnline',function(data){
+      $http.get('/friend/list').success(function(response){
+         $scope.friendlist = response;
+         $scope.$apply();
+      });
+    });
 }]);
