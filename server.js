@@ -61,23 +61,17 @@ io.sockets.on('connection', function(socket){
 
       var query="update user set online = ? where userid = ?";
       db.query(String(query),['N',data.userid],function(err,rows){
-        
+
         console.log(data.userid + '/' + 'logout');
         io.emit('changeOnline');
       });
     }
   });
 
-  console.log('a user connected');
-
-  var sessionId = socket.id;
-
-  socket.emit('user', sessionId);
-
   // User joins a room
-  socket.on('subscribe', function(data) {
-    console.log('on subscribe ' + data.room);
-    subscribe(socket, data);
+  socket.on('joinBee', function(data) {
+    console.log('on joinBee ' + data.room);
+    joinBee(socket, data);
     //console.log('JOIN ROOM LIST', io.sockets.adapter.rooms);
   });
 
@@ -89,26 +83,21 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.to(room).emit('startPath', data, user);
   });
 
-  socket.on('continuePath', function(top, bottom, user, room) {
+  socket.on('continuePath', function(data, user, room) {
     if (!projects.projects[room] || !projects.projects[room].project) {
       loadError(socket);
       return;
     }
-    socket.broadcast.to(room).emit('continuePath', top, bottom, user);
+    socket.broadcast.to(room).emit('continuePath', data, user);
   });
 
-  socket.on('endPath', function(data, pathname, color, thick, user, room) {
+  socket.on('endPath', function(data, path, user, room) {
     if (!projects.projects[room] || !projects.projects[room].project) {
       loadError(socket);
       return;
     }
-    socket.broadcast.to(room).emit('endPath', data, pathname, color, thick, user, room);
-  });
-
-  socket.on('final', function(data, user, room) {
-    draw.pathStoreFinal(JSON.parse(data), user, room);
-    //socket.broadcast.to(room).emit('endPath', data, user);
-    //socket.broadcast.emit('endPath', data, user);
+    draw.pathStoreFinal(path, user, room);
+    socket.broadcast.to(room).emit('endPath', data, user);
   });
 
   socket.on('Hit:remove', function(room, name){
@@ -146,7 +135,7 @@ io.sockets.on('connection', function(socket){
 });
 
 // Subscribe a client to a room
-function subscribe(socket, data) {
+function joinBee(socket, data) {
   var room = data.room;
 
   // Subscribe the client to the room
