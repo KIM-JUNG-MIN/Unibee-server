@@ -421,20 +421,15 @@ socket.on('endPath', function(data, pathname, color, thick, user, room) {
 });
 
 socket.on('Hit:remove', function(name) {
+		console.log('hit remoobvevevevve');
 	  removeItem(name);
 });
 
 socket.on('image:add', function(img, position, name) {
 	var raster = new Raster(img);
 	raster.position = new Point(position[1], position[2]);
-
-		//
-		// console.log(item_move_delta);
-
-
 	raster.name = name;
-	view.draw();
-	console.log(raster);
+	paper.view.draw();
 
 });
 

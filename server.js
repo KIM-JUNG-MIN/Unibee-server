@@ -46,6 +46,7 @@ app.get('/main', function(req, res){
 
 
 io.sockets.on('connection', function(socket){
+  console.log('connected~~~~~~~');
 
   socket.on('update_friendlist',function(data){
     //data.purpose;
@@ -101,7 +102,6 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('Hit:remove', function(room, name){
-    console.log(name);
     socket.broadcast.to(room).emit('Hit:remove', name);
     draw.removeHitItem(room, name);
   });
