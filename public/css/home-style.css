@@ -6,6 +6,11 @@
     .navbar-fixed-top {
         background: #424242;
         min-height: 70px;
+        padding: 0 15px;
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 1002;
     }
 
     .navbar-right {

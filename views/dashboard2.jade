@@ -1,0 +1,59 @@
+extends ./view-template
+
+block styles
+    link(href='/public/css/dashboard-style.css', rel='stylesheet', type='text/css')
+
+block content
+  body(ng-app='mainCtr')
+      nav.navbar.navbar-fixed-top
+        .container
+          .navbar-header
+            a.navbar-brand(href='/main')
+              img(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_logo.png')
+              
+          .navbar-right
+            ul.nav.userprofile(ng-controller='UserInfo')
+              li.dropdown
+                a.dropdown-toggle(data-toggle='dropdown')
+                  i.fa.fa-user
+                  |  {{userinfo.nickname}}
+                  b.caret
+                      
+                ul.dropdown-menu.extended
+                  .notify-arrow
+                  div
+                    .col-lg-5
+                      img.img-circle.center-block(src='{{userinfo.userprofileimage}}', width='100', height='100')
+                    .col-lg-7
+                      h4 {{userinfo.nickname}}
+                      h5 userID : {{userinfo.userid}}
+                      a.btn.btn-warning(ng-click='logout()', role='button') 로그아웃
+                      
+      section#main-content
+        section.jumbotron.text-xs-center
+          .container
+            h1 Bee!
+            p.lead.text-muted
+              |Bee is a group for sharing your work and fun with friends.
+            p
+            .bd-example
+              a.btn.btn-warning(href='/bee/new', role='button') New Bee
+        section.site-min-height
+          h3
+            i.fa.fa-angle-right
+            |  My BeeList
+          .row.mt
+            .col-lg-12
+              .row(ng-controller='BeeList')
+                .col-lg-3.col-md-3.col-sm-3.mb(ng-click='enterBee(bee.bee_id)', ng-repeat='bee in beelist')
+                  .content-panel.pn
+                    #blog-bg
+                      .blog-thumnail
+                        img.img-responsive(src='{{bee.bee_thumbnail}}')
+                      .blog-title {{bee.bee_title}}
+                    .blog-text
+                      | {{bee.bee_description}} 
+                      
+
+block scripts
+  script(src='/public/controllers/mainCtr-controller.js')

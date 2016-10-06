@@ -37,13 +37,12 @@ app.set('view engine', 'jade');
 
 app.get('/main', function(req, res){
   if(req.user) {
-    res.render('dashboard', {userid:req.user.userid});
+    res.render('dashboard2', {nickname:req.user.nickname});
   } else {
     res.render('home');
   }
 });
 //홈 화면
-
 
 io.sockets.on('connection', function(socket){
   console.log('connected~~~~~~~');
