@@ -12,17 +12,18 @@ block content
 
       h5.navbar-text.navbar-right
         | Team FG : 김정민, 박익비
+          
+  section.jumbotron
+    section.site-min-height
+      .container
+        img.img-responsive.center-block(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon_shadow.png')
+        h2 Welcome to UniBee!
+        h3 With UniBee, you can collaborate on projects and share them in real time.
+        p.buttons
+          a.btn.btn-lg.btn-register(href='/auth/register', role='button') 회원가입
+          a.btn.btn-lg.btn-login(href='/auth/login', role='button') 로그인
 
-  .jumbotron
+  .navbar.navbar-default.nav-footer
     .container
-      img.img-responsive.center-block(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon_shadow.png')
-      h2 Welcome to UniBee!
-      h3 With UniBee, you can collaborate on projects and share them in real time.
-      p
-        a.btn.btn-lg.btn-custom(href='/auth/register', role='button') 회원가입
-        &nbsp&nbsp&nbsp
-        a.btn.btn-lg.btn-custom(href='/auth/login', role='button') 로그인
-
-  .footer
-    .container
-      img.img-responsive(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/duksung_logo.png')
+      .navbar-header
+        img.img-responsive(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/duksung_logo.png')

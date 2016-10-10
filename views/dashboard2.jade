@@ -29,15 +29,16 @@ block content
                       h5 userID : {{userinfo.userid}}
                       a.btn.btn-warning(ng-click='logout()', role='button') 로그아웃
                       
-      section#main-content
-        section.jumbotron.text-xs-center
-          .container
-            h1 Bee!
-            p.lead.text-muted
-              |Bee is a group for sharing your work and fun with friends.
-            p
+      section.jumbotron.text-xs-center
+        .container
+          h1 Bee!
+          p.lead.text-muted
+            |Bee is a group for sharing your work and fun with friends.
+          p
             .bd-example
-              a.btn.btn-warning(href='/bee/new', role='button') New Bee
+            a.btn.btn-warning(href='/bee/new', role='button') New Bee
+            
+      section#main-content
         section.site-min-height
           h3
             i.fa.fa-angle-right

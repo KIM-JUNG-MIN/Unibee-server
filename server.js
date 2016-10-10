@@ -35,6 +35,11 @@ app.use('/friend', friend);
 app.set('views', './views');
 app.set('view engine', 'jade');
 
+
+app.get('/home', function(req, res){
+    res.render('home');
+});
+
 app.get('/main', function(req, res){
   if(req.user) {
     res.render('dashboard2', {nickname:req.user.nickname});
