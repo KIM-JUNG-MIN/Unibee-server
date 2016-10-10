@@ -97,7 +97,7 @@ ul.userprofile > li > a:hover {
 
 .jumbotron{
   margin-top: 70px;
-  background-image: url('http://i4.istockimg.com/file_thumbview_approve/61604272/5/stock-photo-61604272-gradient-white-gray-abstract-background.jpg');
+  background-image: url('https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/dashboard-thumbnail.png');
   background-size: 100% 100%;
   color: #000; // change text color
 }
