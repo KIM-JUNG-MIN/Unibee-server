@@ -18,7 +18,6 @@ $( "#btn_png" ).click(function() {
 	var items = project.getItems({
 	    selected: false
 	});
-	console.log(items);
 });
 
 $('#toggle-erase').change(function() {
@@ -36,9 +35,8 @@ $('#fileInput').bind('change', function(e) {
 
 			var img = new Image();
 			img.src = reader.result;
-
 			drawImage(img.src);
-		}
+		};
 
 		reader.readAsDataURL(file);
 	} else {
@@ -49,19 +47,22 @@ $('#fileInput').bind('change', function(e) {
 var bee_room = window.location.pathname.split('/')[2];
 paths = {};
 var thick = 5;
-var color = 'green';
+var color = '#fff';
 var socket = io();
 var currentUser;
 var currentPathName;
 
 function changeThick() {
 	thick = strokeSlider.getValue();
-};
+}
 
+function changeColor(jscolor) {
+	color = '#' + jscolor;
+}
 
 function drawImage(img){
 	var raster = new Raster(img);
-	raster.position = paper.view.left;
+	raster.position = paper.view.center;
 	raster.name = currentUser + ":image:" + raster.id;;
 	socket.emit('image:add', bee_room, img, raster.position, raster.name);
 }

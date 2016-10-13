@@ -7,14 +7,29 @@ block styles
   link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.3/css/bootstrap-slider.min.css', rel='stylesheet')
   link(href='https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css', rel='stylesheet')
 
-
 block content
   body(ng-app='drawApp', ng-controller='drawCtrl')
+    ul.iconmenu
+      li
+        a(href='#', rel='csslibrary')
+          span.fa.fa-mouse-pointer
+      li
+        a(href='#', rel='webtools', title='Web Tools')
+          span.fa.fa-pencil
+      li
+        a(href='#', rel='[title]', title='RSS')
+          span.fa.fa-eraser
+      li
+        label(for='fileInput')
+          span.fa.fa-picture-o
+        input#fileInput(type='file', style='display: none;')
+
+      li
+        button.jscolor(class="{onFineChange:'changeColor(this)', valueElement:null}", value='fff')  
 
     .btn-group(role='group')
-      button#btn_color.btn.btn-default(type='button') colorpicker
       button#btn_png.btn.btn-default(type='button') exportPNG
-
+    
     br
     br
     input#ex8(
@@ -30,9 +45,6 @@ block content
       |  Erase
 
     h1 Uniee whieboard
-    h3 Image File Reader
-    div
-      input#fileInput(type='file')
 
     button#btn_img_up.btn.btn-default(type='button') +
     button#btn_img_down.btn.btn-default(type='button') -
@@ -44,6 +56,8 @@ block content
 block scripts
   script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.3/bootstrap-slider.js')
   script(src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.js')
+  
   //socket.io
   script(src="/socket.io/socket.io.js")
 
