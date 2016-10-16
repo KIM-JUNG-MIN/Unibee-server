@@ -1,28 +1,14 @@
-var drawControllers = angular.module('drawControllers', []);
-
-var hitOptions = {
-		segments: false,
-		stroke: true,
-		fill: true,
-		tolerance: 5
+var ToolType = {
+	menu_pointer: 1,
+	menu_pencil: 2,
+	menu_erase: 3
 };
+
+var ToolNum;
 
 var strokeSlider = $('#ex8').slider({tooltip: 'always'})
 		.on('change', changeThick)
 		.data('slider');
-
-var isErase =  $('#toggle-erase').prop('checked');
-
-$( "#btn_png" ).click(function() {
-	// Fetch all selected path items:
-	var items = project.getItems({
-	    selected: false
-	});
-});
-
-$('#toggle-erase').change(function() {
-		isErase = $(this).prop('checked');
-});
 
 $('#fileInput').bind('change', function(e) {
 	var file = fileInput.files[0];
@@ -46,8 +32,8 @@ $('#fileInput').bind('change', function(e) {
 
 var bee_room = window.location.pathname.split('/')[2];
 paths = {};
-var thick = 5;
-var color = '#fff';
+var thick = 2;
+var color = '#000';
 var socket = io();
 var currentUser;
 var currentPathName;
@@ -60,18 +46,35 @@ function changeColor(jscolor) {
 	color = '#' + jscolor;
 }
 
-function drawImage(img){
-	var raster = new Raster(img);
-	raster.position = paper.view.center;
-	raster.name = currentUser + ":image:" + raster.id;;
-	socket.emit('image:add', bee_room, img, raster.position, raster.name);
-}
+var drawControllers = angular.module('drawControllers', []);
 
 drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 
 	$http.get('/userinfo/me').success(function(response){
 		 currentUser = response[0].userid;
 	});
+
+	$scope.onClickPointer = function(){
+		$(".iconmenu li a").removeClass("active");
+		$('#menu_pointer').addClass("active");
+		document.getElementById("pencilSidenav").style.display='none';
+		ToolNum = 1;
+	};
+
+	$scope.onClickPencil = function(){
+		$(".iconmenu li a").removeClass("active");
+		$('#menu_pencil').addClass("active");
+		document.getElementById("pencilSidenav").style.display='block';
+		ToolNum = 2;
+	};
+
+	$scope.onClickErase = function(){
+		$(".iconmenu li a").removeClass("active");
+		$('#menu_erase').addClass("active");
+		document.getElementById("pencilSidenav").style.display='none';
+		ToolNum = 3;
+	};
+
 });
 
 drawControllers.directive('drawingBoard', function(){
@@ -93,79 +96,89 @@ drawControllers.directive('drawingBoard', function(){
 								  y: event.offsetY,
 									color: color,
 									thick: thick
-								}
+								};
 
-								if (isErase) {
-									//erase mode (isErase = true)
+								switch (ToolNum) {
+									case ToolType.menu_pointer :
+									case ToolType.menu_erase :
 
-									var mouseTouch = new paper.Point(event.offsetX, event.offsetY)
+										var hitOptions = {
+												segments: false,
+												stroke: true,
+												fill: false,
+												tolerance: 5
+										};
 
-									hitResult = project.hitTest(mouseTouch, hitOptions);
+										var	hitResult = project.hitTest(new paper.Point(event.offsetX, event.offsetY), hitOptions);
 
-									if (hitResult) {
-										//There is hitResult
-										if (hitResult.type == 'stroke') {
-											var hitItem = hitResult.item;
-											removeItem(hitItem.name);
-											//hitItem.remove();
-											socket.emit('Hit:remove', bee_room, hitItem.name);
-										}else if (hitResult.type == 'pixel') {
-											var hitItem = hitResult.item;
-											removeItem(hitItem.name);
-											socket.emit('Hit:remove', bee_room, hitItem.name);
-											//selectObject = hitResult.item;
-											//SelectedLine(true);
+										if (hitResult &&  ToolNum == ToolType.menu_pointer && hitResult.type == 'pixel') {
+											var hitImageItem = hitResult.item;
+											hitImageItem.selected = true;
+										} else if ( hitResult &&  ToolNum == ToolType.menu_erase && hitResult.type == 'stroke') {
+											var hitPathItem = hitResult.item;
+											removeItem(hitPathItem.name);
+											socket.emit('Hit:remove', bee_room, hitPathItem.name);
 										}
-									}
+										break;
+									case ToolType.menu_pencil :
+										startPath(startObject, currentUser);
+										socket.emit('startPath', startObject, currentUser, bee_room);
+										break;
+									default:
 
-
-
-								}else{
-									//draw mode (isErase = false)
-									startPath(startObject, currentUser);
-									socket.emit('startPath', startObject, currentUser, bee_room);
 								}
-              }
+
+              }//mouseDown
 
               function mouseDrag(event) {
 
 								var continueObject = {
 							    x: event.offsetX,
 							    y: event.offsetY
-							  }
+							  };
 
-								if (isErase) {
+								switch (ToolNum) {
+									case ToolType.menu_pointer :
+									case ToolType.menu_erase :
 
-								}else{
-									continuePath(continueObject, currentUser);
-									socket.emit('continuePath', continueObject, currentUser, bee_room);
+										break;
+									case ToolType.menu_pencil :
+										continuePath(continueObject, currentUser);
+										socket.emit('continuePath', continueObject, currentUser, bee_room);
+										break;
+									default:
+
 								}
 
-
-              }
+              }//mouseDrag
 
               function mouseUp(event) {
 
 								var endObject = {
 							    x: event.offsetX,
 							    y: event.offsetY
-							  }
+							  };
 
-								if (isErase) {
+								switch (ToolNum) {
+									case ToolType.menu_pointer :
+									case ToolType.menu_erase :
 
-								}else{
-									var path = paths[currentUser];
+										break;
+									case ToolType.menu_pencil :
+										var path = paths[currentUser];
 
-									path.add(new paper.Point(endObject.x, endObject.y));
-									path.smooth();
+										path.add(new paper.Point(endObject.x, endObject.y));
+										path.smooth();
 
-									delete paths[currentUser]
+										delete paths[currentUser];
 
-									socket.emit('endPath', endObject, path, currentUser, bee_room);
+										socket.emit('endPath', endObject, path, currentUser, bee_room);
+										break;
+									default:
+
 								}
 
-
-              }
+              }//mouseUp
 
       			paper.view.draw();
 
@@ -220,6 +233,13 @@ function removeItem(name) {
 	var target = project.activeLayer.children[name];
 	target.remove();
 	paper.view.draw();
+}
+
+function drawImage(img){
+	var raster = new Raster(img);
+	raster.position = paper.view.center;
+	raster.name = currentUser + ":image:" + raster.id;
+	socket.emit('image:add', bee_room, img, raster.position, raster.name);
 }
 
 socket.emit('joinBee', {room:bee_room});
