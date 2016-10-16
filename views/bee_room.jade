@@ -9,7 +9,26 @@ block styles
 
 block content
   body(ng-app='drawApp', ng-controller='drawCtrl')
-    
+    nav.navbar.navbar-fixed-top
+      ul.nav.navbar-nav
+        li#BackToDashboard
+          a(href='/main', role='button')
+            span.fa.fa-home
+        
+        li#BeeInfo.dropdown
+            a.dropdown-toggle(data-toggle='dropdown')
+              i.fa.fa-cube
+              |  {{beeinfo.bee_title}}
+              b.caret
+            ul.dropdown-menu.extended
+              div
+                .col-lg-4
+                  img.center-block(src='{{beeinfo.bee_thumbnail}}', width='110', height='110')
+                .col-lg-8
+                  h4 {{beeinfo.bee_title}}
+                  hr
+                  h5 {{beeinfo.bee_description}}
+                    
     ul.iconmenu
       li
         a#menu_pointer(ng-click='onClickPointer()')

@@ -54,6 +54,18 @@ drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 		 currentUser = response[0].userid;
 	});
 
+	$http({
+		method: 'POST',
+		url: '/bee/beeinfo',
+		data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
+		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+	}).then(function successCallback(response) {
+			$scope.beeinfo = response.data[0];
+			
+	}, function errorCallback(response) {
+			alert('error occur! Try again! ');
+	});
+
 	$scope.onClickPointer = function(){
 		$(".iconmenu li a").removeClass("active");
 		$('#menu_pointer').addClass("active");

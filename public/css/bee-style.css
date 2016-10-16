@@ -8,13 +8,57 @@ canvas{
   height: 100%;
 }
 
+#BackToDashboard > a {
+  display: block;
+  text-decoration: none;
+  color: black;
+  font-size: 35px;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+#BackToDashboard > a:hover {
+    background-color: transparent !important;
+    text-decoration: none;
+    color: #FEE305 !important;
+}
+
+#BeeInfo > a {
+  width: auto;
+  margin-top: 10px;
+  color: #000;
+  font-size: 16px;
+  box-shadow: 3px 1px 3px rgba(0,0,0,0.4);
+  background-color: #fff !important;
+}
+
+.dropdown-menu.extended {
+    max-width: 500px !important;
+    min-width: 160px !important;
+    top: 60px;
+    width: 400px !important;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.176) !important;
+    border: none !important;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    /* Safari and Chrome */
+    .dropdown-menu.extended  {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.176) !important;
+    };
+}
+
+
 #pencilSidenav.sidenav {
     width: 300px;
     padding-bottom: 10px;
     position: fixed;
     top: 35%;
     left:2.01em;
-    background-color: #eee;
+    background-color: #fff;
     display: none;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
@@ -43,7 +87,7 @@ ul.iconmenu{
   margin: 0;
   padding: 0;
   width: 2em;
-  background: #eee;
+  background: #fff;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   box-shadow: 3px 1px 3px rgba(0,0,0,0.4);
@@ -75,5 +119,5 @@ ul.iconmenu li button{
 
 
 ul.iconmenu li a:hover, ul.iconmenu li a.active{ /* style for selected icon */
-  background: #feee69;
+  background: #FEE305;
 }

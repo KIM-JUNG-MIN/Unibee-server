@@ -133,6 +133,20 @@ router.get('/:id', function(req, res){
   res.render('bee_room', {hello:req.params.id});
 });
 
+router.post('/beeinfo', function(req, res){
+  var queryData = 'SELECT bee_title, bee_description, bee_thumbnail ';
+  queryData += 'FROM bee ';
+  queryData += 'WHERE bee_id = ? ';
+
+  db.query(queryData, req.body.beeID, function (err, results) {
+      if (err) {
+        res.send(500);
+      }
+      res.json(results);
+  });
+});
+
+
 
 
 module.exports = router;
