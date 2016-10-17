@@ -1,13 +1,20 @@
 body{
-  background-image: url('http://www.tricky-photoshop.com/wp-content/uploads/2012/10/111.png');
+  background-image: url('https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/bee-whiteboard-background.png');
   background-size: 100% 100%;
 }
 
 canvas{
-  width : 100%;
-  height: 100%;
+  width:auto !important; /* real browsers */
+  width:96%; /* IE6: treaded as min-height*/
+  min-width:96%; /* real browsers */
+
+  height:auto !important; /* real browsers */
+  height:100%; /* IE6: treaded as min-height*/
+  min-height:100%; /* real browsers */
 }
 
+
+/*BackToMain , BeeInfo*/
 #BackToDashboard > a {
   display: block;
   text-decoration: none;
@@ -45,45 +52,18 @@ canvas{
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-    /* Safari and Chrome */
     .dropdown-menu.extended  {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.176) !important;
     };
 }
 
-
-#pencilSidenav.sidenav {
-    width: 300px;
-    padding-bottom: 10px;
-    position: fixed;
-    top: 35%;
-    left:2.01em;
-    background-color: #fff;
-    display: none;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-}
-
-
-.fa.dd-picture-o{
-    font-size:100px;
-
-    input[type='file']{
-      height:10px;
-      width:10px;
-      position:absolute;
-      top:0;
-      left:0;
-      opacity:0;
-      cursor:pointer;
-    }
-}
-
+/*ToolMenu : pointer, pencil, erase, image, colorpicker */
 ul.iconmenu{
   font-size: 25px;
   list-style: none;
   position: fixed;
   left: 0;
-  top: 30%; /* offset from top of page to display icon menu */
+  top: 30%;
   margin: 0;
   padding: 0;
   width: 2em;
@@ -121,3 +101,113 @@ ul.iconmenu li button{
 ul.iconmenu li a:hover, ul.iconmenu li a.active{ /* style for selected icon */
   background: #FEE305;
 }
+
+#pencilSidenav.sidenav {
+    width: 300px;
+    padding-bottom: 10px;
+    position: fixed;
+    top: 35%;
+    left:2.01em;
+    background-color: #fff;
+    display: none;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+input[type='file']{
+  height:10px;
+  width:10px;
+  position:absolute;
+  top:0;
+  left:0;
+  opacity:0;
+  cursor:pointer;
+}
+
+
+/*BeeModal : member, chat*/
+a.bee_modal{
+  font-size: 50px;
+  list-style: none;
+  position: fixed;
+  right: 1px;
+  top: 40%;
+  margin: 0;
+  padding: 0;
+  width: 2em;
+  background: #EAE8E8;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border:1px solid #FEE305 !important;
+}
+
+a.bee_modal > img{
+  width: 100%;
+}
+
+.modal.left .modal-dialog,
+	.modal.right .modal-dialog {
+		position: fixed;
+		margin: auto;
+		width: 400px;
+		height: 100%;
+		-webkit-transform: translate3d(0%, 0, 0);
+		    -ms-transform: translate3d(0%, 0, 0);
+		     -o-transform: translate3d(0%, 0, 0);
+		        transform: translate3d(0%, 0, 0);
+	}
+
+	.modal.left .modal-content,
+	.modal.right .modal-content {
+		height: 100%;
+		overflow-y: auto;
+	}
+
+	.modal.left .modal-body,
+	.modal.right .modal-body {
+		padding: 15px 15px 80px;
+	}
+
+/*Right*/
+	.modal.right.fade .modal-dialog {
+		right: -320px;
+		-webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+		   -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+		     -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+		        transition: opacity 0.3s linear, right 0.3s ease-out;
+	}
+
+	.modal.right.fade.in .modal-dialog {
+		right: 0;
+	}
+
+/* ----- MODAL STYLE ----- */
+	.modal-content {
+		border-radius: 0;
+		border: none;
+	}
+
+	.modal-header {
+		border-bottom-color: #EEEEEE;
+		background-color: #FAFAFA;
+	}
+
+  #tab-1 ul li{
+    height: 70px;
+  }
+
+  #tab-1 ul li img{
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+  }
+
+  /*friendlist*/
+  .online{
+   margin-right: 10px;
+   float: right;
+   margin-top: 5%;
+   height: 15px;
+   width: 15px;
+   background-color: #0EE700;
+   border-radius: 500px;
+  }

@@ -6,6 +6,8 @@ var ToolType = {
 
 var ToolNum;
 
+$('#test').BootSideMenu({side:"right", autoClose:true});
+
 var strokeSlider = $('#ex8').slider({tooltip: 'always'})
 		.on('change', changeThick)
 		.data('slider');
@@ -61,7 +63,7 @@ drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	}).then(function successCallback(response) {
 			$scope.beeinfo = response.data[0];
-			
+
 	}, function errorCallback(response) {
 			alert('error occur! Try again! ');
 	});
@@ -76,8 +78,18 @@ drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 	$scope.onClickPencil = function(){
 		$(".iconmenu li a").removeClass("active");
 		$('#menu_pencil').addClass("active");
-		document.getElementById("pencilSidenav").style.display='block';
 		ToolNum = 2;
+
+		var element = document.getElementById('pencilSidenav'),
+	      style = window.getComputedStyle(element),
+	      display = style.getPropertyValue('display');
+
+		if (display == 'none') {
+			element.style.display='block';
+		}else{
+		  element.style.display='none';
+	  }
+
 	};
 
 	$scope.onClickErase = function(){
@@ -88,6 +100,23 @@ drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 	};
 
 });
+
+drawControllers.controller('FriendList', ['$scope','$http', function($scope, $http) {
+
+	// first friend list
+	$http.get('/friend/list').success(function(response){
+		 $scope.friendlist = response;
+	});
+
+	// change friend online status
+	socket.on('changeOnline',function(data){
+		$http.get('/friend/list').success(function(response){
+			 $scope.friendlist = response;
+			 $scope.$apply();
+		});
+	});
+}]);
+
 
 drawControllers.directive('drawingBoard', function(){
 
