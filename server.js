@@ -35,6 +35,11 @@ app.use('/friend', friend);
 app.set('views', './views');
 app.set('view engine', 'jade');
 
+app.get('/zzzz', function(req, res){
+    res.render('friend_add_form');
+});
+
+
 
 app.get('/home', function(req, res){
     res.render('home');
@@ -71,6 +76,12 @@ io.sockets.on('connection', function(socket){
         io.emit('changeOnline');
       });
     }
+  });
+
+  // User joins a room
+  socket.on('start', function(msg) {
+    console.log(msg);
+    //console.log('JOIN ROOM LIST', io.sockets.adapter.rooms);
   });
 
   // User joins a room

@@ -1,18 +1,20 @@
 body{
-  background-image: url('https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/bee-whiteboard-background.png');
-  background-size: 100% 100%;
+  /*background-image: url('https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/bee-whiteboard-background.png');
+  background-size: 100% 100%;*/
+  height: 100%;
 }
 
-canvas{
-  width:auto !important; /* real browsers */
-  width:96%; /* IE6: treaded as min-height*/
-  min-width:96%; /* real browsers */
-
-  height:auto !important; /* real browsers */
-  height:100%; /* IE6: treaded as min-height*/
-  min-height:100%; /* real browsers */
+body {
+			background-image: url("https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/bee-whiteboard-background.png") ;
+			background-position: center center;
+			background-repeat:  no-repeat;
+			background-attachment: fixed;
+			background-size:  100% 100%;
 }
 
+#myCanvas{
+  width: 100%;
+}
 
 /*BackToMain , BeeInfo*/
 #BackToDashboard > a {
@@ -98,7 +100,7 @@ ul.iconmenu li button{
 }
 
 
-ul.iconmenu li a:hover, ul.iconmenu li a.active{ /* style for selected icon */
+ul.iconmenu li a:hover, ul.iconmenu li a.active{
   background: #FEE305;
 }
 
@@ -123,32 +125,39 @@ input[type='file']{
   cursor:pointer;
 }
 
-
 /*BeeModal : member, chat*/
 a.bee_modal{
   font-size: 50px;
   list-style: none;
   position: fixed;
-  right: 1px;
+  right: 0px;
   top: 40%;
   margin: 0;
   padding: 0;
-  width: 2em;
-  background: #EAE8E8;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border:1px solid #FEE305 !important;
+  width: 1.5em;
+  background: #424242;
+  border-radius: 5px 0px 0px 5px;
+  border-left: 1.5px solid #FEE305 !important;
+  border-bottom: 1.5px solid #FEE305 !important;
+  border-top: 1.5px solid #FEE305 !important;
 }
 
 a.bee_modal > img{
   width: 100%;
 }
 
-.modal.left .modal-dialog,
+
+/*******************************
+* MODAL AS LEFT/RIGHT SIDEBAR
+* Add "left" or "right" in modal parent div, after class="modal".
+* Get free snippets on bootpen.com
+*******************************/
+	.modal.left .modal-dialog,
 	.modal.right .modal-dialog {
+    right: 0;
 		position: fixed;
 		margin: auto;
-		width: 400px;
+		width: 320px;
 		height: 100%;
 		-webkit-transform: translate3d(0%, 0, 0);
 		    -ms-transform: translate3d(0%, 0, 0);
@@ -188,7 +197,7 @@ a.bee_modal > img{
 
 	.modal-header {
 		border-bottom-color: #EEEEEE;
-		background-color: #FAFAFA;
+		background-color: #e1e1e1;
 	}
 
   #tab-1 ul li{
@@ -210,4 +219,73 @@ a.bee_modal > img{
    width: 15px;
    background-color: #0EE700;
    border-radius: 500px;
+  }
+
+  .btn-style{
+    color: #424242;
+    font-size: 18px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border:1.5px solid #424242 !important;
+    background-color: #FEE305 !important;
+  }
+
+  .btn-friend {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+
+  .btn-style:hover {
+      border:1px solid #FEE305 !important;
+      background-color: #424242 !important;
+      border-color: #FEE305 !important;
+      text-decoration: none;
+      border-radius: 4px;
+      -webkit-border-radius: 4px;
+      color: #FEE305 !important;
+  }
+
+  .modal-footer{
+    text-align: center;
+  }
+
+  .wrapper {
+    text-align: center;
+    border: 1px dashed #95a5a6;
+    height: 70px;
+    margin-top: 16px;
+    border-radius: 4px;
+    position: relative;
+    font-size: 15px;
+  }
+
+  .wrapper p {
+    line-height: 31px;
+  }
+
+  .friendresult img{
+      width: 50px;
+      margin-right: 10px;
+  }
+  .friendresult {
+      padding: 8px;
+  }
+
+
+  ::-webkit-scrollbar-track
+  {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      background-color: #F5F5F5;
+  }
+
+  ::-webkit-scrollbar
+  {
+      width: 12px;
+      background-color: #F5F5F5;
+  }
+
+  ::-webkit-scrollbar-thumb
+  {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+      background-color: #555;
   }

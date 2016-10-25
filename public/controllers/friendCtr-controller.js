@@ -2,7 +2,8 @@ var friendCtr = angular.module('friendCtr', []);
 
 friendCtr.controller('friendSearch', ['$scope','$http', function($scope, $http) {
   $scope.addFriend = true;
-  $scope.submit= function(){
+
+  $scope.searchFriend= function(){
 
     if ($scope.friendSearch == null) {
       alert('Please input freind id');
@@ -31,8 +32,6 @@ friendCtr.controller('friendSearch', ['$scope','$http', function($scope, $http) 
           alert('error occur! Try again! ');
       });
     }
-
-
-  }
+  };
 
 }]);

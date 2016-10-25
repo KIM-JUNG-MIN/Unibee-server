@@ -2,14 +2,14 @@ var express = require('express');
 var db = require('../util/db.js');
 var router = express.Router();
 
-router.get('/list', function(req, res){
+router.post('/list', function(req, res){
 
   var queryData = 'SELECT user.userid, user.nickname, user.userprofileimage, user.online ';
   queryData += 'FROM user ';
   queryData += 'WHERE userid IN ';
-  queryData += '(SELECT friend_id FROM friend WHERE me_id = ?)';
+  queryData += '(SELECT user_member_list FROM member WHERE bee_member_list = ?)';
 
-  db.query(queryData, req.user.userid, function (err, results) {
+  db.query(queryData, req.body.beeID, function (err, results) {
       if (err) {
         res.sendStatus(500);
       }
@@ -17,7 +17,7 @@ router.get('/list', function(req, res){
   });
 });
 
-router.get('/add', function(req, res){
+router.get('/form/:bee_room', function(req, res){
   res.render('friend_add_form');
 });
 
@@ -39,11 +39,11 @@ router.post('/search', function(req, res){
 router.get('/add/:result', function(req, res){
 
   var friend = {
-    me_id: req.user.userid,
-    friend_id: req.params.result
-  }
+    user_member_list: req.user.userid,
+    bee_member_list: req.params.result
+  };
 
-  var queryData = 'INSERT INTO friend SET ?';
+  var queryData = 'INSERT INTO member SET ?';
 
   db.query(queryData, friend, function (err, results) {
       if (err) {
@@ -51,8 +51,6 @@ router.get('/add/:result', function(req, res){
       }
       res.redirect('/main');
   });
-
-
 });
 
 

@@ -6,6 +6,20 @@ var ToolType = {
 
 var ToolNum;
 
+$('[open-modal]').on('click', function(){
+  var id = $(this).attr('open-modal');
+  $('.modal#'+id).addClass('active');
+});
+
+$('[close-modal]').on('click', function(){
+  $(this).parents('.modal').removeClass('active');
+});
+
+$('.modal').on('click', function(e) {
+  if(e.target !== this){return};
+  $(this).removeClass('active');
+});
+
 $('#test').BootSideMenu({side:"right", autoClose:true});
 
 var strokeSlider = $('#ex8').slider({tooltip: 'always'})
@@ -50,7 +64,45 @@ function changeColor(jscolor) {
 
 var drawControllers = angular.module('drawControllers', []);
 
-drawControllers.controller('drawCtrl', function($scope, $http, drawService){
+drawControllers.controller('drawCtrl', function($scope, $http, $window, drawService){
+
+	$scope.addFriend = true;
+	$scope.addFriend = true;
+
+  $scope.searchFriend= function(){
+
+    if ($scope.friendSearch == null) {
+      alert('Please input freind id');
+    }else{
+      $http({
+        method: 'POST',
+        url: '/friend/search',
+        data: 'friendSearch=' + $scope.friendSearch, /* 파라메터로 보낼 데이터 */
+  	    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(function successCallback(response) {
+
+          var result = response.data[0];
+
+          if (result == null) {
+            alert('There is no user');
+            $scope.friendSearch = '';
+          }else{
+            $scope.addFriend = false;
+            $scope.showme = true;
+            $scope.userprofileimage = response.data[0].userprofileimage;
+            $scope.nickname = response.data[0].nickname;
+            $scope.userid = response.data[0].userid;
+          }
+
+      }, function errorCallback(response) {
+          alert('error occur! Try again! ');
+      });
+    }
+  };
+
+	$scope.addFriendOK= function(userid){
+		alert(userid);
+  };
 
 	$http.get('/userinfo/me').success(function(response){
 		 currentUser = response[0].userid;
@@ -67,6 +119,37 @@ drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 	}, function errorCallback(response) {
 			alert('error occur! Try again! ');
 	});
+
+	$http({
+		method: 'POST',
+		url: '/friend/list',
+		data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
+		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+	}).then(function successCallback(response) {
+			$scope.friendlist = response.data;
+
+	}, function errorCallback(response) {
+			alert('error occur! Try again! ');
+	});
+
+	$scope.addFriend = function(){
+		var url = '/friend/form/' + bee_room;
+		$window.location.href= url;
+	};
+
+
+	//
+	// $http.get('/friend/list').success(function(response){
+	// 	 $scope.friendlist = response;
+	// });
+	//
+	// // change friend online status
+	// socket.on('changeOnline',function(data){
+	// 	$http.get('/friend/list').success(function(response){
+	// 		 $scope.friendlist = response;
+	// 		 $scope.$apply();
+	// 	});
+	// });
 
 	$scope.onClickPointer = function(){
 		$(".iconmenu li a").removeClass("active");
@@ -100,23 +183,6 @@ drawControllers.controller('drawCtrl', function($scope, $http, drawService){
 	};
 
 });
-
-drawControllers.controller('FriendList', ['$scope','$http', function($scope, $http) {
-
-	// first friend list
-	$http.get('/friend/list').success(function(response){
-		 $scope.friendlist = response;
-	});
-
-	// change friend online status
-	socket.on('changeOnline',function(data){
-		$http.get('/friend/list').success(function(response){
-			 $scope.friendlist = response;
-			 $scope.$apply();
-		});
-	});
-}]);
-
 
 drawControllers.directive('drawingBoard', function(){
 
@@ -155,7 +221,7 @@ drawControllers.directive('drawingBoard', function(){
 										if (hitResult &&  ToolNum == ToolType.menu_pointer && hitResult.type == 'pixel') {
 											var hitImageItem = hitResult.item;
 											hitImageItem.selected = true;
-										} else if ( hitResult &&  ToolNum == ToolType.menu_erase && hitResult.type == 'stroke') {
+										} else if ( hitResult &&  ToolNum == ToolType.menu_erase) {
 											var hitPathItem = hitResult.item;
 											removeItem(hitPathItem.name);
 											socket.emit('Hit:remove', bee_room, hitPathItem.name);

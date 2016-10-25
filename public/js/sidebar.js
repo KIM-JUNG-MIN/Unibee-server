@@ -1,34 +1,38 @@
-$(document).ready(function() {
+// $(document).ready(function() {
 
-  $(".nav.navbar-nav li").on("click", function() {
+  // $(".nav.navbar-nav li").on("click", function() {
+  //
+  //   $(".nav.navbar-nav li").removeClass("active");
+  //   $(this).addClass("active");
+  //
+  //   switch ($(this).attr('id')) {
+  //     case 'nav-user':
+  //       if ($(this).hasClass("active")) {
+  //         controlUserNav();
+  //         closeFriendNav();
+  //       }
+  //       break;
+  //     case 'nav-friend':
+  //       if ($(this).hasClass("active")) {
+  //         controlFriendNav();
+  //         closeUserNav();
+  //       }
+  //       break;
+  //     case 'nav-chat':
+  //       if ($(this).hasClass("active")) {
+  //         closeUserNav();
+  //         closeFriendNav();
+  //       }
+  //       break;
+  //   }
+  //
+  // });
 
-    $(".nav.navbar-nav li").removeClass("active");
-    $(this).addClass("active");
 
-    switch ($(this).attr('id')) {
-      case 'nav-user':
-        if ($(this).hasClass("active")) {
-          controlUserNav();
-          closeFriendNav();
-        }
-        break;
-      case 'nav-friend':
-        if ($(this).hasClass("active")) {
-          controlFriendNav();
-          closeUserNav();
-        }
-        break;
-      case 'nav-chat':
-        if ($(this).hasClass("active")) {
-          closeUserNav();
-          closeFriendNav();
-        }
-        break;
-    }
-
+  $(".bee_community").on("click", function() {
+    controlFriendNav();
   });
 
-});
 
 function controlUserNav() {
   var element = document.getElementById('userSidenav'),

@@ -130,7 +130,7 @@ router.get('/list', function(req, res){
 
 
 router.get('/:id', function(req, res){
-  res.render('bee_room', {hello:req.params.id});
+  res.render('bee_room', {bee_id:req.params.id});
 });
 
 router.post('/beeinfo', function(req, res){

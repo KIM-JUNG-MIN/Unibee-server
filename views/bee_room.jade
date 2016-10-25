@@ -32,23 +32,27 @@ block content
                   hr
                   h5 {{beeinfo.bee_description}}
     // BackToMain , BeeInfo "end"
-    
-    // BeeModal : member, chat "start"             
-    a.btn.bee_modal(type='button', data-toggle='modal', data-target='#myModal2')
-      img(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon_shadow.png')
 
-    #myModal2.modal.right.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel2')
-      .modal-dialog(role='document')
+    // BeeModal : member, chat "start"  
+    a.btn.bee_modal(type='button', data-toggle='modal', data-target='#myModal')
+      img(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon_shadow.png')
+      
+      // first modal
+    #myModal.modal.right.fade(aria-hidden='true', style='display: none; z-index: 1050;')
+      .modal-dialog
         .modal-content
           .modal-header
             .tab-container
               .tab-bar
-                a.tab.is-active(href='#panel-one', data-tab='tab-1')
+                a.tab.is-active(href='#', data-tab='tab-1')
                   i.material-icons friends
-                a.tab(href='#panel-two', data-tab='tab-2')
+                a.tab(href='#', data-tab='tab-2')
                   i.material-icons chat
+          .container
           .modal-body
-            #tab-1.tab-content.is-active(ng-controller='FriendList')
+            #tab-1.tab-content.is-active
+              a.btn.btn-lg.btn-style.btn-friend(data-toggle='modal', href='#myModal2') 멤버 추가
+                                    
               ul.list-group(ng-repeat='friend in friendlist')
                 li.list-group-item 
                   span.pull-left
@@ -56,11 +60,33 @@ block content
                     | {{friend.nickname}}
                   .text-right
                     span.online(ng-style="{'background-color': friend.online=='Y' ? '#0EE700' :'red'}")  
-
-                
+              
             #tab-2.tab-content
               | Two
-    // BeeModal : member, chat "end"          
+
+    // second modal
+    #myModal2.modal(aria-hidden='true', style='display: none; z-index: 1060;')
+      .modal-dialog.modal-mg
+        .modal-content
+          .modal-header
+            h4.modal-title 친구추가
+          .container
+          .modal-body
+            form
+            .input-group
+              input#searchText.form-control(type='text', ng-model='friendSearch', placeholder='친구 아이디를 입력하세요')
+              span.input-group-btn
+                input#searchBtn.btn.btn-default(ng-click='searchFriend()', value = '검색')
+            .form-group
+              .wrapper
+                 p(ng-hide='showme') Search result will appear here!
+                 span.friendresult.pull-left(ng-show='showme')
+                     img.img-circle(src='{{userprofileimage}}')
+                     {{nickname}} ({{userid}})
+          .modal-footer
+            a.btn.btn-mg.btn-style(ng-click='addFriendOK(userid)', role='button') 확인
+            a.btn.btn-mg.btn-style(href='#', data-dismiss='modal') 취소
+            
     // ToolMenu : pointer, pencil, erase, image, colorpicker "start"                            
     ul.iconmenu
       li
@@ -96,7 +122,6 @@ block content
       li
         button.jscolor(class="{onFineChange:'changeColor(this)', value:'000', valueElement:null}") 
     // ToolMenu : pointer, pencil, erase, image, colorpicker "end"   
-    
     // Content : canvas "start"  
     canvas#myCanvas(drawing-board)
     // Content : canvas "end"
