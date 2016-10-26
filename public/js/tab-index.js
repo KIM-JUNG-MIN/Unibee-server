@@ -12,12 +12,16 @@ $(document).ready(function() {
   resize();
   $(window).on("resize", function(){
       resize();
+      window.location.reload(true);
   });
 
 });
 
 function resize(){
-  console.log('width : '+window.innerWidth);
-  console.log('height : '+window.innerHeight);
-  $("#myCanvas").outerHeight($(window).height()-$("#myCanvas").offset().top- Math.abs($("#myCanvas").outerHeight(true) - $("#myCanvas").outerHeight())-5);
+  var canvas = document.getElementById('myCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+//   console.log('width : '+window.innerWidth);
+//   console.log('height : '+window.innerHeight);
+// }
 }
