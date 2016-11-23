@@ -14,8 +14,10 @@ block content
       div(role='main_page')
         .login-register-form-section
             form(action='/auth/register', method='post', enctype='multipart/form-data')
-              input.file-loading(name='userprofile', type='file')
-
+              .wrapper
+                 img#userprofileimage(src='https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/user_default.png')
+              input#file-input.file-loading(name='userprofile', type='file')
+              
               .input-group
                 .input-group-addon
                   i.fa.fa-user
@@ -32,3 +34,7 @@ block content
                 input.form-control.input-lg(type='password', name='password', placeholder='Password')
 
               input.btn.btn-custom(type='submit', value='Register')
+
+block scripts
+  script(src='/public/library/load-image.js')
+  script(src='/public/js/local-image-upload.js')

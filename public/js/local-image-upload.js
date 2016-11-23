@@ -12,3 +12,18 @@ function readURL(input) {
                     console.log(input.files[0].name);
     }
 }
+
+document.getElementById('file-input').onchange = function (e) {
+    loadImage(
+        e.target.files[0],
+        function (img) {
+          console.log(img);
+          $('#userprofileimage').attr('src', img);
+          //document.body.appendChild(img);
+        },
+        {
+          maxWidth: 150,
+          maxHeight: 150
+        } // Options
+    );
+};

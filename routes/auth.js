@@ -3,8 +3,8 @@ module.exports = function(app) {
   var router = express.Router();
 
   var fs = require('fs');
+  var async = require('async');
   var formidable = require('formidable');
-  var util = require('util');
   var AWS = require('aws-sdk');
 
   var db = require('../util/db.js');
@@ -42,24 +42,34 @@ module.exports = function(app) {
   router.post('/register', function(req, res){
     var form = new formidable.IncomingForm();
 
-
-
     form.parse(req, function(err, fields, files) {
+      var s3 = new AWS.S3();
 
-      if (files.userprofile.name != '') {
-        var s3 = new AWS.S3();
-        var params = {
-          'Bucket':'unibee/userprofile',
-          'Key': fields.userid + '_profile.png',
-          'ACL':'public-read',
-          'Body': fs.createReadStream(files.userprofile.path),
-          'ContentType':files.userprofile.type
-        }
+      async.waterfall([
+          function(callback){
+              if (files.userprofile.name != '') {
+                   var params = {
+                     'Bucket':'unibee/userprofile',
+                     'Key': fields.userid + '_profile',
+                     'ACL':'public-read',
+                     'Body': fs.createReadStream(files.userprofile.path),
+                     'ContentType':files.userprofile.type
+                   }
 
-        s3.upload(params, function(err, data) {
-            if (err) throw err;
-            console.log('seccess upload image to s3');
-        });
+                   s3.upload(params, function(err, data) {
+                       if (err) throw err;
+                       var image_yes = 'https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/' + fields.userid + '_profile';
+                       callback(null, image_yes);
+                   });
+
+              }else{
+                  var image_no = 'https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/user_default.png';
+                  callback(null, image_no);
+              }
+          }
+      ],
+      function(err, imageURL){
+        if (err) throw err;
 
         hasher({password:fields.password}, function(err, pass, salt, hash) {
 
@@ -69,7 +79,7 @@ module.exports = function(app) {
             password : hash,
             salt : salt,
             nickname : fields.nickname,
-            userprofileimage: 'https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/' + fields.userid + '_profile.png'
+            userprofileimage: imageURL
           };
 
           var sql = 'INSERT INTO user SET ?';
@@ -80,48 +90,14 @@ module.exports = function(app) {
             } else {
               req.login(user, function(err){
                 req.session.save(function(){
-                  res.redirect('/main');
+                  res.redirect('/');
                 });
               });
             }
-          });
-          //db
-        });
-        //hasher
-
-      }else{
-
-        hasher({password:fields.password}, function(err, pass, salt, hash) {
-
-          var user = {
-            authtype: 'local',
-            userid : fields.userid,
-            password : hash,
-            salt : salt,
-            nickname : fields.nickname,
-            userprofileimage: 'https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/user_default.png'
-          };
-
-          var sql = 'INSERT INTO user SET ?';
-          db.query(sql, user , function(err, result){
-            if (err) {
-              console.log(err);
-              res.status(500);
-            } else {
-              req.login(user, function(err){
-                req.session.save(function(){
-                  res.redirect('/main');
-                });
-              });
-            }
-          });
-          //db
-        });
-        //hasher
-      }
-
-    });
-    //form.parse
+          }); // db
+        }); // hasher
+      }); // async
+    }); // form.parse
 
   });
   //회원가입 form에서 받은 데이터로 사용자 추가
@@ -130,11 +106,11 @@ module.exports = function(app) {
   router.post('/login',
     passport.authenticate('local',
     {
-      failureRedirect: '/login',
+      failureRedirect: '/auth/login',
       failureFlash: true }),
       function(req, res){
         req.session.save(function(){
-          res.redirect('/main');
+          res.redirect('/');
         });
       }//미들웨어
   );
@@ -147,20 +123,26 @@ module.exports = function(app) {
       var sql = 'SELECT * FROM user WHERE userid =?';
       db.query(sql, uid , function(err, results){
         if (err) {
-          return done('There is no user.');
+          return done(null, false, { message: 'Error' });
         }
         var user = results[0];
-        return hasher({password:pwd, salt:user.salt}, function(err, pass, salt, hash){
-          if(hash === user.password){
-            done(null, user);
-          } else {
-            done(null, false);
-          }
-        });
+
+        if (user) {
+          hasher({password:pwd, salt:user.salt}, function(err, pass, salt, hash){
+            console.log('hello');
+            if(hash === user.password){
+              return done(null, user);
+            } else {
+              return done(null, false, { message: 'Incorrect password.' });
+            }
+          });
+        }else{
+          return done(null, false, { message: 'There is no user.' });
+        }
+
       });
     }
   ));
-
 
   passport.serializeUser(function(user, done) {
     done(null, user.userid);
@@ -179,11 +161,11 @@ module.exports = function(app) {
   });
   //등록된 session 호출
 
-  router.post('/logout', function(req, res) {
+  router.get('/logout', function(req, res) {
     req.logout();
 
     req.session.save(function(){
-      res.json('success');
+      res.redirect('/');
     });
   });
   //로그아웃

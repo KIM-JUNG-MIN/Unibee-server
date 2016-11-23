@@ -35,19 +35,9 @@ app.use('/friend', friend);
 app.set('views', './views');
 app.set('view engine', 'jade');
 
-app.get('/zzzz', function(req, res){
-    res.render('friend_add_form');
-});
-
-
-
-app.get('/home', function(req, res){
-    res.render('home');
-});
-
-app.get('/main', function(req, res){
+app.get('/', function(req, res){
   if(req.user) {
-    res.render('dashboard2', {nickname:req.user.nickname});
+    res.render('dashboard', {nickname:req.user.nickname});
   } else {
     res.render('home');
   }
