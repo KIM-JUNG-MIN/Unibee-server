@@ -13,9 +13,11 @@ block content
       h1 로그인
       div(role='main_page')
         .login-register-form-section
+          if (message.length > 0)
+            .alert.alert-danger(role='alert')
+              strong= message
+
            form(method='post', action='/auth/login')
-              -if(message)
-                .alert.alert-danger #{message}
               .input-group
                 .input-group-addon
                   i.fa.fa-user

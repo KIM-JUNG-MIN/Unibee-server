@@ -14,10 +14,13 @@ module.exports = function(app) {
 
   var pbkfd2Password = require("pbkdf2-password");
   var hasher = pbkfd2Password();
+  var flash = require('connect-flash');
   var passport = require('passport');
   var LocalStrategy = require('passport-local').Strategy;
 
   AWS.config.region = 'ap-northeast-1';
+
+  app.use(flash());
 
   app.use(session({
     secret: 'sid',
@@ -35,7 +38,8 @@ module.exports = function(app) {
   //회원가입 form
 
   router.get('/login', function(req, res) {
-    res.render('login_form');
+    res.render('login_form', { message: req.flash('loginMessage') });
+    //res.render('login_form');
   });
   //로그인 form
 
@@ -115,29 +119,29 @@ module.exports = function(app) {
       }//미들웨어
   );
 
-  passport.use(new LocalStrategy(
-    function(userid, password, done){
+  passport.use(new LocalStrategy({
+      passReqToCallback : true
+    }, function(req, userid, password, done){
       var uid = userid;
       var pwd = password;
 
       var sql = 'SELECT * FROM user WHERE userid =?';
       db.query(sql, uid , function(err, results){
         if (err) {
-          return done(null, false, { message: 'Error' });
+          return done(null, false, req.flash('loginMessage', 'Error! Try again'));
         }
         var user = results[0];
 
         if (user) {
           hasher({password:pwd, salt:user.salt}, function(err, pass, salt, hash){
-            console.log('hello');
             if(hash === user.password){
               return done(null, user);
             } else {
-              return done(null, false, { message: 'Incorrect password.' });
+              return done(null, false, req.flash('loginMessage', 'Incorrect Password!'));
             }
           });
         }else{
-          return done(null, false, { message: 'There is no user.' });
+          return done(null, false, req.flash('loginMessage', 'User Not Found!'));
         }
 
       });
