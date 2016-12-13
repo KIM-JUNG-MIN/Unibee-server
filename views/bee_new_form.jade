@@ -12,13 +12,14 @@ block content
     .login-form
       #center
         span#icon.fa.fa-cubes
-        h1 Bee 만들기
+        h1 Bee
       div
         .login-register-form-section
           form(method='post', action='/bee/new', enctype='multipart/form-data')
             .form-group
-              label.control-label ProfileImage:
-              input.file-loading(name='beethumbnail', type='file')
+              .wrapper
+                 img#bee_thumbnail(src='https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/bee_default.png')
+              input#file-input.file-loading(name='beethumbnail', type='file')
             .form-group
               label.control-label Title:
               input.form-control(type='text', name='bee_title', placeholder='Bee의 제목을 입력해주세요.')
@@ -28,3 +29,7 @@ block content
             #center
               button#bee_submit.btn.btn-custom(type='submit') OK
               button.btn.btn-custom(type='button', onclick='history.back(-1)') Cancel
+
+block scripts
+  script(src='/public/library/load-image.js')
+  script(src='/public/js/local-image-upload.js')

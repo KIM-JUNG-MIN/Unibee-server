@@ -1,7 +1,7 @@
 //var socket = io();
 var mainCtr = angular.module('mainCtr', [])
   .controller('BeeList', ['$scope','$http', '$window', function($scope, $http, $window) {
-    
+
     $scope.enterBee = function(bee_id){
       var url = '/bee/' + bee_id;
       $window.location.href= url;
@@ -20,7 +20,6 @@ var mainCtr = angular.module('mainCtr', [])
       //  currentUser = response[0].userid;
       //  var data_login={purpose:'login', userid:currentUser}
       //  socket.emit('update_friendlist', data_login);
-
     });
 
     // $scope.logout = function(){

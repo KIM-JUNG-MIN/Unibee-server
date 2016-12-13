@@ -12,6 +12,22 @@ body {
   margin: 0 auto;
 }
 
+.wrapper {
+  margin-left: 31%;
+  margin-right: 31%;
+  border: 1px dashed #95a5a6;
+  height: 152px;
+  width: 152px;
+  margin-top: 16px;
+  border-radius: 3px;
+  position: relative;
+}
+
+#bee_thumbnail{
+  height: 150px;
+  width: 150px;
+}
+
 #content{
   margin-top: 100px;
 }

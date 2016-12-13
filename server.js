@@ -1,40 +1,45 @@
+// npm package
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var path = require('path');
 var bodyParser = require('body-parser');
+var io = require('socket.io')(http);
 
+// router
 var auth = require('./routes/auth');
 var bee = require('./routes/bee');
 var userinfo = require('./routes/userinfo');
-var friend = require('./routes/friend');
+var member = require('./routes/member');
 
-
+// modules
 var projects = require('./util/projects.js');
 var db = require('./util/db.js');
 var ueberDB = require('./util/ueberDB.js');
 var paper = require('paper');
 var draw = require('./routes/draw.js');
 
-var io = require('socket.io')(http);
-
+// set Port
 app.set('port', process.env.PORT || 9000);
+
+// post method parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//static path
+// static path
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/node_modules', express.static(__dirname + '/node_modules'));
 
-//routing
+// routing
 app.use('/auth', auth(app));
 app.use('/bee', bee);
 app.use('/userinfo', userinfo);
-app.use('/friend', friend);
+app.use('/member', member);
 
-//view template
+// view template
 app.set('views', './views');
 app.set('view engine', 'jade');
 
+// home
 app.get('/', function(req, res){
   if(req.user) {
     res.render('dashboard', {nickname:req.user.nickname});
@@ -42,7 +47,6 @@ app.get('/', function(req, res){
     res.render('home');
   }
 });
-//홈 화면
 
 io.sockets.on('connection', function(socket){
   console.log('connected~~~~~~~');
@@ -187,7 +191,7 @@ function loadError(socket) {
   socket.emit('project:load:error');
 }
 
-
+// open server
 http.listen(app.get('port'), function()
 {
 	console.log('listening on Unibee server', app.get('port'));

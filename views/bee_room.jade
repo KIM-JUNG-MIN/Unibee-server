@@ -7,17 +7,17 @@ block styles
   link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.3/css/bootstrap-slider.min.css', rel='stylesheet')
   link(href='https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css', rel='stylesheet')
   link(href='https://cdn.rawgit.com/AndreaLombardo/BootSideMenu/master/css/BootSideMenu.css', rel='stylesheet')
-  
-  
+
+
 block content
   body(ng-app='drawApp', ng-controller='drawCtrl')
     // BackToMain , BeeInfo "start"
     nav.navbar.navbar-fixed-top
       ul.nav.navbar-nav
         li#BackToDashboard
-          a(href='/main', role='button')
+          a(href='/', role='button')
             span.fa.fa-home
-        
+
         li#BeeInfo.dropdown
             a.dropdown-toggle(data-toggle='dropdown')
               i.fa.fa-cube
@@ -33,10 +33,10 @@ block content
                   h5 {{beeinfo.bee_description}}
     // BackToMain , BeeInfo "end"
 
-    // BeeModal : member, chat "start"  
+    // BeeModal : member, chat "start"
     a.btn.bee_modal(type='button', data-toggle='modal', data-target='#myModal')
       img(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_icon_shadow.png')
-      
+
       // first modal
     #myModal.modal.right.fade(aria-hidden='true', style='display: none; z-index: 1050;')
       .modal-dialog
@@ -52,15 +52,15 @@ block content
           .modal-body
             #tab-1.tab-content.is-active
               a.btn.btn-lg.btn-style.btn-friend(data-toggle='modal', href='#myModal2') 멤버 추가
-                                    
-              ul.list-group(ng-repeat='friend in friendlist')
-                li.list-group-item 
+
+              ul.list-group(ng-repeat='member in memberlist')
+                li.list-group-item
                   span.pull-left
-                    img#friendProfile.img-circle(src='{{friend.userprofileimage}}')
-                    | {{friend.nickname}}
+                    img#friendProfile.img-circle(src='{{member.userprofileimage}}')
+                    | {{member.nickname}}
                   .text-right
-                    span.online(ng-style="{'background-color': friend.online=='Y' ? '#0EE700' :'red'}")  
-              
+                    span.online(ng-style="{'background-color': member.online=='Y' ? '#0EE700' :'red'}")  
+
             #tab-2.tab-content
               | Two
 
@@ -74,9 +74,9 @@ block content
           .modal-body
             form
             .input-group
-              input#searchText.form-control(type='text', ng-model='friendSearch', placeholder='친구 아이디를 입력하세요')
+              input#searchText.form-control(type='text', ng-model='memberSearch', placeholder='친구 아이디를 입력하세요')
               span.input-group-btn
-                input#searchBtn.btn.btn-default(ng-click='searchFriend()', value = '검색')
+                input#searchBtn.btn.btn-default(ng-click='searchMember()', value = '검색')
             .form-group
               .wrapper
                  p(ng-hide='showme') Search result will appear here!
@@ -84,10 +84,10 @@ block content
                      img.img-circle(src='{{userprofileimage}}')
                      {{nickname}} ({{userid}})
           .modal-footer
-            a.btn.btn-mg.btn-style(ng-click='addFriendOK(userid)', role='button') 확인
+            a.btn.btn-mg.btn-style(ng-click='addMemberOK(userid)') 확인
             a.btn.btn-mg.btn-style(href='#', data-dismiss='modal') 취소
-            
-    // ToolMenu : pointer, pencil, erase, image, colorpicker "start"                            
+
+    // ToolMenu : pointer, pencil, erase, image, colorpicker "start"
     ul.iconmenu
       li
         a#menu_pointer(ng-click='onClickPointer()')
@@ -95,7 +95,7 @@ block content
       li
         a#menu_pencil(ng-click='onClickPencil()')
           span.fa.fa-pencil
-          
+
           #pencilSidenav.sidenav
             h3 size
             .col-xs-3.col-sm-1
@@ -120,18 +120,18 @@ block content
         input#fileInput(type='file', style='display: none;')
 
       li
-        button.jscolor(class="{onFineChange:'changeColor(this)', value:'000', valueElement:null}") 
-    // ToolMenu : pointer, pencil, erase, image, colorpicker "end"   
-    // Content : canvas "start"  
+        button.jscolor(class="{onFineChange:'changeColor(this)', value:'000', valueElement:null}")
+    // ToolMenu : pointer, pencil, erase, image, colorpicker "end"
+    // Content : canvas "start"
     //canvas#myCanvas(drawing-board)
     canvas#myCanvas(drawing-board style='left: 0px; top: 0px;')
     // Content : canvas "end"
-    
+
 block scripts
   script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.3/bootstrap-slider.js')
   script(src='https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.js')
-  
+
   //socket.io
   script(src="/socket.io/socket.io.js")
   script(type='text/javascript', src='/public/js/BootSideMenu.js')

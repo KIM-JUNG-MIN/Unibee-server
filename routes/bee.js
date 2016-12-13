@@ -24,10 +24,7 @@ var AWS = require('aws-sdk');
 
 var router = express.Router();
 
-
 AWS.config.region = 'ap-northeast-1';
-
-var room = 'hello';
 
 router.get('/new', function(req, res){
   res.render('bee_new_form');
@@ -37,87 +34,77 @@ router.post('/new', function(req, res){
   var form = new formidable.IncomingForm();
 
   form.parse(req, function(err, fields, files) {
+    var s3 = new AWS.S3();
 
-    var beeid = shortid.generate();
+    async.waterfall([
+        function(callback){
+            if (files.beethumbnail.name  != '') {
+                 var params = {
+                   'Bucket':'unibee/beethumbnail',
+                   'Key': fields.bee_title + '_thumbnail',
+                   'ACL':'public-read',
+                   'Body': fs.createReadStream(files.beethumbnail.path),
+                   'ContentType':files.beethumbnail.type
+                 }
 
-    var bee = {
-      bee_id: beeid,
-      bee_title: ' ',
-      bee_description : ' ',
-      bee_thumbnail : ' '
-    };
+                 s3.upload(params, function(err, data) {
+                     if (err) throw err;
+                     var image_yes = 'https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/' + fields.bee_title + '_thumbnail';
+                     return callback(null, image_yes);
+                 });
 
-    var member = {
-      user_member_list: req.user.userid,
-      bee_member_list: beeid
-    }
-
-    if (files.beethumbnail.name != '') {
-
-      var s3 = new AWS.S3();
-      var params = {
-        'Bucket':'unibee/beethumbnail',
-        'Key': fields.bee_title + '_thumbnail.png',
-        'ACL':'public-read',
-        'Body': fs.createReadStream(files.beethumbnail.path),
-        'ContentType':files.beethumbnail.type
-      }
-
-      s3.upload(params, function(err, data) {
-          if (err) throw err;
-          console.log('seccess upload image to s3');
-      });
-
-      bee.bee_thumbnail =  'https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/' + fields.bee_title + '_thumbnail.png';
-
-    }else{
-      //there is no image
-      bee.bee_thumbnail =  'https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/bee_default.png';
-
-    }
-
-    bee.bee_title = fields.bee_title;
-    bee.bee_description = fields.bee_description;
-
-    async.parallel([
-        function(callback) {
-            var queryData1 = 'INSERT INTO bee SET ?';
-            db.query(queryData1, bee, function (err, result1) {
-                if (err) {
-                    return callback(err);
-                }
-                return callback(null, result1);
-            });
+            }else{
+                var image_no = 'https://s3-ap-northeast-1.amazonaws.com/unibee/beethumbnail/bee_default.png';
+                return callback(null, image_no);
+            }
         },
-        function(callback) {
-            var queryData2 = 'INSERT INTO member SET ?';
-            db.query(queryData2, member, function (err, result2) {
-                if (err) {
-                    return callback(err);
-                }
-                return callback(null, result2);
-            });
-        }
-    ], function(error, callbackResults) {
-        if (error) {
-            console.log(error);
-        } else {
-            res.redirect('/main');
-        }
-    });
-    //async
+        function (imageURL, callback) {
 
+          var bee = {
+            bee_id: shortid.generate(),
+            bee_title: fields.bee_title,
+            bee_description: fields.bee_description,
+            bee_thumbnail: imageURL
+          };
+
+          var queryData1 = 'INSERT INTO bee SET ?';
+          db.query(queryData1, bee , function(err, result){
+            if (err) {
+              console.log('create bee fail');
+              return callback(err);
+            }
+            return callback(null, bee.bee_id);
+          });
+
+        }],
+        function(err, beeid){
+          if (err) throw err;
+
+          var member = {
+            user_member: req.user.userid,
+            bee_member: beeid
+          };
+
+          var queryData2 = 'INSERT INTO member SET ?';
+          db.query(queryData2, member , function(err, result){
+            if (err) {
+              console.log('new bee of member fail');
+              res.status(500);
+            } else {
+              res.redirect('/');
+            }
+          }); // db
+    }); // async
   });
   //form.parse
 });
-
 
 router.get('/list', function(req, res){
 
   var queryData = 'SELECT bee.bee_id, bee.bee_title, bee.bee_description, bee.bee_thumbnail ';
   queryData += 'FROM bee, user, member ';
-  queryData += 'WHERE bee.bee_id = member.bee_member_list ';
-  queryData += 'AND user.userid = member.user_member_list ';
+  queryData += 'WHERE bee.bee_id = member.bee_member ';
+  queryData += 'AND user.userid = member.user_member ';
   queryData += 'AND user.userid = ? ';
 
   db.query(queryData, req.user.userid, function (err, results) {
@@ -127,7 +114,6 @@ router.get('/list', function(req, res){
       res.json(results);
   });
 });
-
 
 router.get('/:id', function(req, res){
   res.render('bee_room', {bee_id:req.params.id});
@@ -145,8 +131,5 @@ router.post('/beeinfo', function(req, res){
       res.json(results);
   });
 });
-
-
-
 
 module.exports = router;

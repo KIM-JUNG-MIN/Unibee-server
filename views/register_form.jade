@@ -15,9 +15,9 @@ block content
         .login-register-form-section
             form(action='/auth/register', method='post', enctype='multipart/form-data')
               .wrapper
-                 img#userprofileimage(src='https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/user_default.png')
+                 img#user_profileimage(src='https://s3-ap-northeast-1.amazonaws.com/unibee/userprofile/user_default.png')
               input#file-input.file-loading(name='userprofile', type='file')
-              
+
               .input-group
                 .input-group-addon
                   i.fa.fa-user

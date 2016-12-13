@@ -66,18 +66,17 @@ var drawControllers = angular.module('drawControllers', []);
 
 drawControllers.controller('drawCtrl', function($scope, $http, $window, drawService){
 
-	$scope.addFriend = true;
-	$scope.addFriend = true;
+	$scope.showme = false;
 
-  $scope.searchFriend= function(){
+  $scope.searchMember= function(){
 
-    if ($scope.friendSearch == null) {
+    if ($scope.memberSearch == null) {
       alert('Please input freind id');
     }else{
       $http({
         method: 'POST',
-        url: '/friend/search',
-        data: 'friendSearch=' + $scope.friendSearch, /* 파라메터로 보낼 데이터 */
+        url: '/member/search',
+        data: 'memberSearch=' + $scope.memberSearch, /* 파라메터로 보낼 데이터 */
   	    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(function successCallback(response) {
 
@@ -85,9 +84,9 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
 
           if (result == null) {
             alert('There is no user');
-            $scope.friendSearch = '';
+            $scope.memberSearch = '';
           }else{
-            $scope.addFriend = false;
+            //$scope.addFriend = false;
             $scope.showme = true;
             $scope.userprofileimage = response.data[0].userprofileimage;
             $scope.nickname = response.data[0].nickname;
@@ -100,8 +99,24 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
     }
   };
 
-	$scope.addFriendOK= function(userid){
-		alert(userid);
+	$scope.addMemberOK= function(userid){
+		if (userid == null) {
+			alert('There is no member to invite');
+		}else{
+			$http({
+        method: 'POST',
+        url: '/member/add',
+        data: 'memberID=' + userid + '&beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
+  	    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).then(function successCallback(response) {
+
+          var result = response.data[0];
+					console.log('success invite member');
+
+      }, function errorCallback(response) {
+          alert('error occur! Try again! ');
+      });
+		}
   };
 
 	$http.get('/userinfo/me').success(function(response){
@@ -122,11 +137,11 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
 
 	$http({
 		method: 'POST',
-		url: '/friend/list',
+		url: '/member/list',
 		data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
 		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	}).then(function successCallback(response) {
-			$scope.friendlist = response.data;
+			$scope.memberlist = response.data;
 
 	}, function errorCallback(response) {
 			alert('error occur! Try again! ');
