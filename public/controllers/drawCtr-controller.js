@@ -66,8 +66,45 @@ var drawControllers = angular.module('drawControllers', []);
 
 drawControllers.controller('drawCtrl', function($scope, $http, $window, drawService){
 
-	$scope.showme = false;
+	// get currentUser and online 
+	$scope.userInfo = function(){
+		$http.get('/userinfo/me').success(function(response){
+			 currentUser = response[0].userid;
+			 var data_login={purpose:'login', userID:currentUser, beeID:bee_room}
+			 socket.emit('update_friendlist', data_login);
+		});
+	}
 
+	// get current bee information
+	$scope.beeInfo = function(){
+		$http({
+			method: 'POST',
+			url: '/bee/beeinfo',
+			data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		}).then(function successCallback(response) {
+				$scope.beeinfo = response.data[0];
+
+		}, function errorCallback(response) {
+				alert('error occur! Try again! ');
+		});
+	}
+
+	// get memberList
+	$scope.memberList= function(){
+		$http({
+			method: 'POST',
+			url: '/member/list',
+			data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		}).then(function successCallback(response) {
+				$scope.memberlist = response.data;
+		}, function errorCallback(response) {
+				alert('error occur! Try again! ');
+		});
+	}
+
+	// when click member search button
   $scope.searchMember= function(){
 
     if ($scope.memberSearch == null) {
@@ -86,7 +123,6 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
             alert('There is no user');
             $scope.memberSearch = '';
           }else{
-            //$scope.addFriend = false;
             $scope.showme = true;
             $scope.userprofileimage = response.data[0].userprofileimage;
             $scope.nickname = response.data[0].nickname;
@@ -99,6 +135,7 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
     }
   };
 
+	// when click member invite
 	$scope.addMemberOK= function(userid){
 		if (userid == null) {
 			alert('There is no member to invite');
@@ -110,8 +147,14 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
   	    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).then(function successCallback(response) {
 
-          var result = response.data[0];
-					console.log('success invite member');
+					if (response.data) {
+						$('#myModal2').modal('hide');
+						$scope.memberSearch = '';
+						$scope.showme = false;
+						$scope.memberList();
+					} else {
+						alert('already member of bee');
+					}
 
       }, function errorCallback(response) {
           alert('error occur! Try again! ');
@@ -119,52 +162,18 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
 		}
   };
 
-	$http.get('/userinfo/me').success(function(response){
-		 currentUser = response[0].userid;
+	// update member online status
+	socket.on('changeOnline',function(){
+
 	});
 
-	$http({
-		method: 'POST',
-		url: '/bee/beeinfo',
-		data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
-		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-	}).then(function successCallback(response) {
-			$scope.beeinfo = response.data[0];
-
-	}, function errorCallback(response) {
-			alert('error occur! Try again! ');
-	});
-
-	$http({
-		method: 'POST',
-		url: '/member/list',
-		data: 'beeID=' + bee_room, /* 파라메터로 보낼 데이터 */
-		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-	}).then(function successCallback(response) {
-			$scope.memberlist = response.data;
-
-	}, function errorCallback(response) {
-			alert('error occur! Try again! ');
-	});
-
-	$scope.addFriend = function(){
-		var url = '/friend/form/' + bee_room;
-		$window.location.href= url;
-	};
-
-
-	//
-	// $http.get('/friend/list').success(function(response){
-	// 	 $scope.friendlist = response;
-	// });
-	//
-	// // change friend online status
-	// socket.on('changeOnline',function(data){
-	// 	$http.get('/friend/list').success(function(response){
-	// 		 $scope.friendlist = response;
-	// 		 $scope.$apply();
-	// 	});
-	// });
+	// initialize
+	(function(){
+		$scope.showme = false;
+		$scope.userInfo();
+		$scope.beeInfo();
+		$scope.memberList();
+	})();
 
 	$scope.onClickPointer = function(){
 		$(".iconmenu li a").removeClass("active");

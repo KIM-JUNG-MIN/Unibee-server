@@ -59,7 +59,7 @@ block content
                     img#friendProfile.img-circle(src='{{member.userprofileimage}}')
                     | {{member.nickname}}
                   .text-right
-                    span.online(ng-style="{'background-color': member.online=='Y' ? '#0EE700' :'red'}")  
+                    span.online(ng-style="{'background-color': member.user_online=='Y' ? '#0EE700' :'red'}")
 
             #tab-2.tab-content
               | Two

@@ -10,10 +10,10 @@ $(document).ready(function() {
   });
 
   resize();
-  $(window).on("resize", function(){
-      resize();
-      window.location.reload(true);
-  });
+  // $(window).on("resize", function(){
+  //     resize();
+  //     window.location.reload(true);
+  // });
 
 });
 
@@ -21,7 +21,4 @@ function resize(){
   var canvas = document.getElementById('myCanvas');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-//   console.log('width : '+window.innerWidth);
-//   console.log('height : '+window.innerHeight);
-// }
 }

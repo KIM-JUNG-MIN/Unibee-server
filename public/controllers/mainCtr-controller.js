@@ -17,9 +17,9 @@ var mainCtr = angular.module('mainCtr', [])
 
     $http.get('/userinfo/me').success(function(response){
        $scope.userinfo = response[0];
-      //  currentUser = response[0].userid;
-      //  var data_login={purpose:'login', userid:currentUser}
-      //  socket.emit('update_friendlist', data_login);
+       currentUser = response[0].userid;
+       var data_login={purpose:'login', userid:currentUser}
+       socket.emit('update_friendlist', data_login);
     });
 
     // $scope.logout = function(){

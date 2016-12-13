@@ -49,17 +49,17 @@ app.get('/', function(req, res){
 });
 
 io.sockets.on('connection', function(socket){
-  console.log('connected~~~~~~~');
 
   socket.on('update_friendlist',function(data){
     //data.purpose;
     if((String(data.purpose.trim()))=='login'){
-      var query="update user set online = ? where userid = ?";
-      db.query(String(query),['Y',data.userid],function(err,rows){
 
-        console.log(data.userid + '/' + 'login');
+      var query='UPDATE member SET user_online = ? ';
+      query += 'WHERE user_member = ? ';
+      query += 'AND bee_member = ? ';
+
+      db.query(String(query),['Y',data.userID, data.beeID],function(err,rows){
         io.emit('changeOnline');
-
       });
     }else{
 
@@ -67,7 +67,7 @@ io.sockets.on('connection', function(socket){
       db.query(String(query),['N',data.userid],function(err,rows){
 
         console.log(data.userid + '/' + 'logout');
-        io.emit('changeOnline');
+        //io.emit('changeOnline');
       });
     }
   });
@@ -137,8 +137,8 @@ io.sockets.on('connection', function(socket){
     // }
   });
 
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
+  socket.on('disconnect',function(){
+    console.log('disconnect');
   });
 
 });
