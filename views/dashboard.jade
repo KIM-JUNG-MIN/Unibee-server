@@ -10,7 +10,7 @@ block content
           .navbar-header
             a.navbar-brand(href='/main')
               img(src='https://s3-ap-northeast-1.amazonaws.com/unibee/imagesource/unibee_logo.png')
-              
+
           .navbar-right
             ul.nav.userprofile(ng-controller='UserInfo')
               li.dropdown
@@ -18,7 +18,7 @@ block content
                   i.fa.fa-user
                   |  {{userinfo.nickname}}
                   b.caret
-                      
+
                 ul.dropdown-menu.extended
                   .notify-arrow
                   div
@@ -28,7 +28,7 @@ block content
                       h4 {{userinfo.nickname}}
                       h5 userID : {{userinfo.userid}}
                       a.btn.btn-warning(href='/auth/logout', role='button') 로그아웃
-                      
+
       section.jumbotron.text-xs-center
         .container
           h1 Bee!
@@ -37,7 +37,7 @@ block content
           p
             .bd-example
             a.btn.btn-warning(href='/bee/new', role='button') New Bee
-            
+
       section#main-content
         section.site-min-height
           h3
@@ -53,8 +53,7 @@ block content
                         img.img-responsive(src='{{bee.bee_thumbnail}}')
                       .blog-title {{bee.bee_title}}
                     .blog-text
-                      | {{bee.bee_description}} 
-                      
+                      | {{bee.bee_description}}
 
 block scripts
   script(src='/public/controllers/mainCtr-controller.js')

@@ -66,12 +66,17 @@ var drawControllers = angular.module('drawControllers', []);
 
 drawControllers.controller('drawCtrl', function($scope, $http, $window, drawService){
 
-	// get currentUser and online 
+	// get currentUser and online
 	$scope.userInfo = function(){
 		$http.get('/userinfo/me').success(function(response){
 			 currentUser = response[0].userid;
-			 var data_login={purpose:'login', userID:currentUser, beeID:bee_room}
-			 socket.emit('update_friendlist', data_login);
+
+			 var data_login= {
+				 userID:currentUser,
+				 beeID:bee_room
+			 }
+			 socket.emit('joinBee', data_login);
+			 socket.emit('user:connection', data_login);
 		});
 	}
 
@@ -162,9 +167,10 @@ drawControllers.controller('drawCtrl', function($scope, $http, $window, drawServ
 		}
   };
 
-	// update member online status
+	// update member online statu
 	socket.on('changeOnline',function(){
-
+		console.log('update user online status');
+		$scope.memberList();
 	});
 
 	// initialize
@@ -373,7 +379,7 @@ function drawImage(img){
 	socket.emit('image:add', bee_room, img, raster.position, raster.name);
 }
 
-socket.emit('joinBee', {room:bee_room});
+//socket.emit('joinBee', {room:bee_room});
 
 socket.on('loading:start', function() {
   console.log('loading:start');

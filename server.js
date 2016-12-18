@@ -50,39 +50,22 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function(socket){
 
-  socket.on('update_friendlist',function(data){
-    //data.purpose;
-    if((String(data.purpose.trim()))=='login'){
+  socket.on('user:connection',function(data){
 
       var query='UPDATE member SET user_online = ? ';
       query += 'WHERE user_member = ? ';
       query += 'AND bee_member = ? ';
 
       db.query(String(query),['Y',data.userID, data.beeID],function(err,rows){
+        console.log(data.userID + ' connect...');
         io.emit('changeOnline');
       });
-    }else{
-
-      var query="update user set online = ? where userid = ?";
-      db.query(String(query),['N',data.userid],function(err,rows){
-
-        console.log(data.userid + '/' + 'logout');
-        //io.emit('changeOnline');
-      });
-    }
-  });
-
-  // User joins a room
-  socket.on('start', function(msg) {
-    console.log(msg);
-    //console.log('JOIN ROOM LIST', io.sockets.adapter.rooms);
   });
 
   // User joins a room
   socket.on('joinBee', function(data) {
-    console.log('on joinBee ' + data.room);
+    console.log('on joinBee...' + data.beeID);
     joinBee(socket, data);
-    //console.log('JOIN ROOM LIST', io.sockets.adapter.rooms);
   });
 
   socket.on('startPath', function(data, user, room) {
@@ -138,20 +121,30 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('disconnect',function(){
-    console.log('disconnect');
+
+    var query='UPDATE member SET user_online = ? ';
+    query += 'WHERE user_member = ? ';
+    query += 'AND bee_member = ? ';
+
+    db.query(String(query),['N',socket.name, socket.bee],function(err,rows){
+      console.log(socket.name + ' disconnect...');
+      io.emit('changeOnline');
+    });
+
   });
 
 });
 
 // Subscribe a client to a room
 function joinBee(socket, data) {
-  var room = data.room;
-
+  var room = data.beeID;
+  var user = data.userID;
   // Subscribe the client to the room
   socket.join(room);
+  socket.name = user;
+  socket.bee = room;
 
   // Create Paperjs instance for this room if it doesn't exist
-
   var project = projects.projects[room];
   if (!project) {
     console.log("made room");
@@ -168,10 +161,6 @@ function joinBee(socket, data) {
     // Project exists in memory, no need to load from database
     loadFromMemory(room, socket);
   }
-  // Broadcast to room the new user count -- currently broken
-  // var rooms = socket.adapter.rooms[room];
-  // var roomUserCount = Object.keys(rooms).length;
-  // io.to(room).emit('user:connect', roomUserCount);
 }
 
 // Send current project to new client
